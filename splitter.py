@@ -6,7 +6,7 @@ textSplitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overl
 def split_document(document) : 
     """Split documents into small chunks."""
     chunks = textSplitter.split_documents(document)
-    print (f"chunk size {len(chunks)}")
+    print (f"No. of chunks : {len(chunks)}")
     return chunks
 
 

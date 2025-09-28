@@ -3,9 +3,10 @@ from langchain_ollama import ChatOllama
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain_chroma import Chroma
-from config import PERSIST_PATH, LLM_MODEL
+from config import PERSIST_PATH, LLM_MODEL, OLLAMA_API_URL
 import time
 import argparse
+from ollama_wrapper import OllamaWrapper
 
 def get_vectorstore(persist_path: str) :
 
@@ -18,7 +19,11 @@ def query_model(persist_path: str) :
 
     """Query model & return reponse."""
 
-    llm_model = ChatOllama(model=LLM_MODEL, temperature=0)
+    #calling ollama build in function
+    #llm_model = ChatOllama(model=LLM_MODEL, temperature=0)
+
+    #calling custom wrapper to use ollama api
+    llm_model = OllamaWrapper(model_name=LLM_MODEL, base_url=OLLAMA_API_URL)
 
     prompt = PromptTemplate(
         template=(
@@ -32,8 +37,6 @@ def query_model(persist_path: str) :
     )
 
     retriever = get_vectorstore(persist_path=persist_path).as_retriever(search_kwargs={"k": 3})
-
-    start_time = time.perf_counter()
     
     qa = RetrievalQA.from_chain_type(
         llm=llm_model,
@@ -45,15 +48,11 @@ def query_model(persist_path: str) :
 
     return qa;
 
-def tester_function() :
-    """Test function."""
+def submit_query(query: str) :
+    """Submit query to model."""
     persist_path = PERSIST_PATH
 
     qa = query_model(persist_path=persist_path)
-
-    #query = "How is Qualcomm company to work for?" #"Does company allow remote work?"  #"What is leave policy in Sellthru?"
-
-    query = argparser()
 
     try:
         start_time = time.perf_counter()
@@ -66,6 +65,7 @@ def tester_function() :
         print("Response: ", response['result'])
        
         #print("Source documents: ", response['source_documents'])
+        return response
     except Exception as e:
         print("Error during query:", e)
         
@@ -73,6 +73,7 @@ def tester_function() :
 
 #create argparser
 def argparser():
+    """Create argparser."""
     parser = argparse.ArgumentParser(description="Ask question here")
     parser.add_argument("query", type=str, help="Query to ask the model")
     
@@ -82,5 +83,9 @@ def argparser():
 
     return query
 
+
+
+
 if __name__ == "__main__" :
-    tester_function() #start the test
+    query = argparser()
+    submit_query(query) #start the process
