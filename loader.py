@@ -1,8 +1,8 @@
-from langchain.schema import Document
+#from langchain.schema import Document
 from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader, TextLoader
 import os
 
-def load_file(file_path: str) -> Document :
+def load_file(file_path: str) :
     """Load a file and return its content as a Document."""
 
     loader = PyPDFLoader(file_path)

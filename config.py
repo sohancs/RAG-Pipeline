@@ -15,3 +15,4 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 OPENAI_EMBEDDING_MODEL = os.getenv("OPENAI_EMBEDDING_MODEL", "text-embedding-3-small")
 
 OLLAMA_API_URL = os.getenv("OLLAMA_API_URL", "http://localhost:11434")
+OLLAMA_API_DOCKER_URL = os.getenv("OLLAMA_API_DOCKER_URL", "http://host.docker.internal:11434")

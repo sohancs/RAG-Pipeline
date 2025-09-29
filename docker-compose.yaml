@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  rag-pipeline-demo:
+    image: rag-pipeline-demo:v1
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./db:/app/db

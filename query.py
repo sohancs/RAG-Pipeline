@@ -1,9 +1,9 @@
 from persistence import get_embedding_model
-from langchain_ollama import ChatOllama
+#from langchain_ollama import ChatOllama
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain_chroma import Chroma
-from config import PERSIST_PATH, LLM_MODEL, OLLAMA_API_URL
+from config import PERSIST_PATH, LLM_MODEL, OLLAMA_API_URL, OLLAMA_API_DOCKER_URL
 import time
 import argparse
 from ollama_wrapper import OllamaWrapper
@@ -22,8 +22,8 @@ def query_model(persist_path: str) :
     #calling ollama build in function
     #llm_model = ChatOllama(model=LLM_MODEL, temperature=0)
 
-    #calling custom wrapper to use ollama api
-    llm_model = OllamaWrapper(model_name=LLM_MODEL, base_url=OLLAMA_API_URL)
+    #calling custom wrapper to use ollama api through docker container
+    llm_model = OllamaWrapper(model_name=LLM_MODEL, base_url=OLLAMA_API_DOCKER_URL)
 
     prompt = PromptTemplate(
         template=(
