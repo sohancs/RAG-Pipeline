@@ -3,10 +3,11 @@ from persistence import get_embedding_model
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain_chroma import Chroma
-from config import PERSIST_PATH, LLM_MODEL, OLLAMA_API_URL, OLLAMA_API_DOCKER_URL
+from config import PERSIST_PATH, LLAMA_LLM_MODEL, OPENAI_LLM_MODEL, OLLAMA_API_URL, OLLAMA_API_DOCKER_URL, LLM_PROVIDER
 import time
 import argparse
 from ollama_wrapper import OllamaWrapper
+from langchain_openai import ChatOpenAI
 
 def get_vectorstore(persist_path: str) :
 
@@ -20,10 +21,15 @@ def query_model(persist_path: str) :
     """Query model & return reponse."""
 
     #calling ollama build in function
-    #llm_model = ChatOllama(model=LLM_MODEL, temperature=0)
+    #llm_model = ChatOllama(model=LLAMA_LLM_MODEL, temperature=0)
 
-    #calling custom wrapper to use ollama api through docker container
-    llm_model = OllamaWrapper(model_name=LLM_MODEL, base_url=OLLAMA_API_DOCKER_URL)
+    if(LLM_PROVIDER == "ollama"):
+        #calling custom wrapper to use ollama api through docker container
+        print("Using OLLAMA LLM model API")
+        llm_model = OllamaWrapper(model_name=LLAMA_LLM_MODEL, base_url=OLLAMA_API_DOCKER_URL)
+    else:
+        print("Using OpenAI LLM model")
+        llm_model = ChatOpenAI(model_name=OPENAI_LLM_MODEL, temperature=0)
 
     prompt = PromptTemplate(
         template=(
